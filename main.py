@@ -1,6 +1,7 @@
 from pathlib import Path
 import requests
 import pprint
+import json
 
 
 class MyBot:
@@ -35,6 +36,12 @@ class MyBot:
         })
         return content
 
+    def save(self):
+        log_dir = Path().absolute() / "logs"
+        log_dir.mkdir(exist_ok=True)
+        log_file = log_dir / "log.json"
+        log_file.write_text(json.dumps(self.messages, ensure_ascii=False))
+
 
 if __name__ == '__main__':
     secret_key = Path("key.txt").read_text()
@@ -44,5 +51,6 @@ if __name__ == '__main__':
     while True:
         a = input("内容を入力(終了はq)：")
         if a == "q":
+            mybot.save()
             break
         print(mybot.say(a))
